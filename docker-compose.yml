@@ -12,8 +12,8 @@ services:
       - db
     volumes:
       - ./forkpi:/opt/code
-        - static_volume:/opt/code/static
-        - shm:/dev/shm
+      - static_volume:/opt/code/static
+      - shm:/dev/shm
 
   nginx:
     build: ./nginx
