@@ -17,14 +17,17 @@ class Pn532Frame:
     communication with the PN532 NFC Chip.
 
     """
+
     def __init__(
-        self, frame_type=PN532_FRAME_TYPE_DATA,
+        self,
+        frame_type=PN532_FRAME_TYPE_DATA,
         preamble=PN532_PREAMBLE,
         start_code_1=PN532_START_CODE_1,
         start_code_2=PN532_START_CODE_2,
         frame_identifier=0xD4,
         data=bytearray(),
-            postamble=PN532_POSTAMBLE):
+        postamble=PN532_POSTAMBLE,
+    ):
         """Constructor for the Pn532Frame class.
 
         Arguments:
@@ -100,7 +103,7 @@ class Pn532Frame:
             byte_array.append(PN532_START_CODE_2)
             byte_array.append(PN532_POSTAMBLE)
 
-            return (byte_array)
+            return byte_array
 
         byte_array.append(self._preamble)
         byte_array.append(self._startCode1)
@@ -115,7 +118,7 @@ class Pn532Frame:
         byte_array.append(self.get_data_checksum())
         byte_array.append(self._postamble)
 
-        return (byte_array)
+        return byte_array
 
     @staticmethod
     def from_response(response):
@@ -124,25 +127,32 @@ class Pn532Frame:
             raise RuntimeError("Invalid Response")
 
         if Pn532Frame.is_ack(response):
-            return Pn532Frame(frame_type=PN532_FRAME_TYPE_ACK,
-                              frame_identifier=0x00)
+            return Pn532Frame(frame_type=PN532_FRAME_TYPE_ACK, frame_identifier=0x00)
 
         if Pn532Frame.is_error(response):
-            return Pn532Frame(frame_type=PN532_FRAME_TYPE_ERROR,
-                             frame_identifier=0x7F,data=b'\x81')
+            return Pn532Frame(
+                frame_type=PN532_FRAME_TYPE_ERROR, frame_identifier=0x7F, data=b"\x81"
+            )
 
         response_length = response[0][PN532_FRAME_POSITION_LENGTH] + 1
         data = bytearray(
-            response[0][PN532_FRAME_POSITION_DATA_START:PN532_FRAME_POSITION_DATA_START + response_length - 2])
+            response[0][
+                PN532_FRAME_POSITION_DATA_START : PN532_FRAME_POSITION_DATA_START
+                + response_length
+                - 2
+            ]
+        )
 
         return Pn532Frame(
             preamble=response[0][PN532_FRAME_POSITION_PREAMBLE],
             start_code_1=response[0][PN532_FRAME_POSITION_START_CODE_1],
             start_code_2=response[0][PN532_FRAME_POSITION_START_CODE_2],
-            frame_identifier=response[0][
-                PN532_FRAME_POSITION_FRAME_IDENTIFIER],
+            frame_identifier=response[0][PN532_FRAME_POSITION_FRAME_IDENTIFIER],
             data=data,
-            postamble=response[0][PN532_FRAME_POSITION_DATA_START + response_length + 2])
+            postamble=response[0][
+                PN532_FRAME_POSITION_DATA_START + response_length + 2
+            ],
+        )
 
     @staticmethod
     def is_valid_response(response):
@@ -150,7 +160,10 @@ class Pn532Frame:
         if (response[0][0] & 0x01) == 0x01:
             if response[0][PN532_FRAME_POSITION_PREAMBLE] == PN532_PREAMBLE:
                 if response[0][PN532_FRAME_POSITION_START_CODE_1] == PN532_START_CODE_1:
-                    if response[0][PN532_FRAME_POSITION_START_CODE_2] == PN532_START_CODE_2:
+                    if (
+                        response[0][PN532_FRAME_POSITION_START_CODE_2]
+                        == PN532_START_CODE_2
+                    ):
                         return True
 
         return False
@@ -167,7 +180,7 @@ class Pn532Frame:
 
     @staticmethod
     def is_error(response):
-        """ Checks if the response is an error frame."""
+        """Checks if the response is an error frame."""
         if response[0][PN532_FRAME_POSITION_LENGTH] == 0x01:
             if response[0][PN532_FRAME_POSITION_LENGTH_CHECKSUM] == 0xFF:
                 if response[0][PN532_FRAME_POSITION_FRAME_IDENTIFIER] == 0x7F:

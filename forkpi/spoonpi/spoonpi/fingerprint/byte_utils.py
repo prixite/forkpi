@@ -1,5 +1,6 @@
 import binascii
 
+
 def hexlify(bytes_):
     """
     Parameters
@@ -19,7 +20,8 @@ def hexlify(bytes_):
     """
     # return ' '.join(binascii.hexlify(ch) for ch in bytes_)
     # return binascii.hexlify(bytes_)
-    return ' '.join(["{0:0>2X}".format(b) for b in bytes_])
+    return " ".join(["{0:0>2X}".format(b) for b in bytes_])
+
 
 def byte_checksum(bytes_):
     """

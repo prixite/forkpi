@@ -5,31 +5,30 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('records', '0021_log_is_fingerprint_used'),
+        ("records", "0021_log_is_fingerprint_used"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='keypair',
-            old_name='hash_all',
-            new_name='hash_pin',
+            model_name="keypair",
+            old_name="hash_all",
+            new_name="hash_pin",
         ),
         migrations.RemoveField(
-            model_name='keypair',
-            name='hash_finger',
+            model_name="keypair",
+            name="hash_finger",
         ),
         migrations.RemoveField(
-            model_name='keypair',
-            name='hash_finger_rfid',
+            model_name="keypair",
+            name="hash_finger_rfid",
         ),
         migrations.RemoveField(
-            model_name='keypair',
-            name='hash_pin_finger',
+            model_name="keypair",
+            name="hash_pin_finger",
         ),
         migrations.RemoveField(
-            model_name='keypair',
-            name='hash_pin_rfid',
+            model_name="keypair",
+            name="hash_pin_rfid",
         ),
     ]

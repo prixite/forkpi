@@ -5,22 +5,20 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('records', '0013_delete_user'),
+        ("records", "0013_delete_user"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('userid', models.AutoField(serialize=False, primary_key=True)),
-                ('username', models.TextField(default=b'')),
-                ('email', models.TextField(default=b'')),
-                ('password', models.CharField(max_length=32)),
+                ("userid", models.AutoField(serialize=False, primary_key=True)),
+                ("username", models.TextField(default=b"")),
+                ("email", models.TextField(default=b"")),
+                ("password", models.CharField(max_length=32)),
             ],
-            options={
-            },
+            options={},
             bases=(models.Model,),
         ),
     ]

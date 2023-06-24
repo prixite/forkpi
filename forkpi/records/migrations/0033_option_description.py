@@ -5,16 +5,15 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('records', '0032_auto_20150413_1213'),
+        ("records", "0032_auto_20150413_1213"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='option',
-            name='description',
-            field=models.TextField(default=''),
+            model_name="option",
+            name="description",
+            field=models.TextField(default=""),
             preserve_default=True,
         ),
     ]

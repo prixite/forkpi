@@ -5,21 +5,27 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('records', '0010_auto_20150226_1211'),
+        ("records", "0010_auto_20150226_1211"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Option',
+            name="Option",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.TextField(unique=True)),
-                ('value', models.TextField(unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("name", models.TextField(unique=True)),
+                ("value", models.TextField(unique=True)),
             ],
-            options={
-            },
+            options={},
             bases=(models.Model,),
         ),
     ]

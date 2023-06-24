@@ -1,6 +1,7 @@
 import struct
 from .byte_utils import *
 
+
 class ResponsePacket(object):
     """
     Unpacks bytes from the response packet sent by the FPS.
@@ -53,24 +54,24 @@ class ResponsePacket(object):
     DEVICE_ID = 0x0001
 
     ERRORS = {
-        0x1001: 'NACK_TIMEOUT'              , # Obsolete, capture timeout
-        0x1002: 'NACK_INVALID_BAUDRATE'     , # Obsolete, Invalid serial baud rate
-        0x1003: 'NACK_INVALID_POS'          , # The specified ID is not between 0~199
-        0x1004: 'NACK_IS_NOT_USED'          , # The specified ID is not used
-        0x1005: 'NACK_IS_ALREADY_USED'      , # The specified ID is already used
-        0x1006: 'NACK_COMM_ERR'             , # Communication Error
-        0x1007: 'NACK_VERIFY_FAILED'        , # 1:1 Verification Failure
-        0x1008: 'NACK_IDENTIFY_FAILED'      , # 1:N Identification Failure
-        0x1009: 'NACK_DB_IS_FULL'           , # The database is full
-        0x100A: 'NACK_DB_IS_EMPTY'          , # The database is empty
-        0x100B: 'NACK_TURN_ERR'             , # Obsolete, Invalid order of the enrollment (The order was not as: EnrollStart -> Enroll1 -> Enroll2 -> Enroll3)
-        0x100C: 'NACK_BAD_FINGER'           , # Too bad fingerprint
-        0x100D: 'NACK_ENROLL_FAILED'        , # Enrollment Failure
-        0x100E: 'NACK_IS_NOT_SUPPORTED'     , # The specified command is not supported
-        0x100F: 'NACK_DEV_ERR'              , # Device Error, especially if Crypto-Chip is trouble
-        0x1010: 'NACK_CAPTURE_CANCELED'     , # Obsolete, The capturing is canceled
-        0x1011: 'NACK_INVALID_PARAM'        , # Invalid parameter
-        0x1012: 'NACK_FINGER_IS_NOT_PRESSED', # Finger is not pressed          
+        0x1001: "NACK_TIMEOUT",  # Obsolete, capture timeout
+        0x1002: "NACK_INVALID_BAUDRATE",  # Obsolete, Invalid serial baud rate
+        0x1003: "NACK_INVALID_POS",  # The specified ID is not between 0~199
+        0x1004: "NACK_IS_NOT_USED",  # The specified ID is not used
+        0x1005: "NACK_IS_ALREADY_USED",  # The specified ID is already used
+        0x1006: "NACK_COMM_ERR",  # Communication Error
+        0x1007: "NACK_VERIFY_FAILED",  # 1:1 Verification Failure
+        0x1008: "NACK_IDENTIFY_FAILED",  # 1:N Identification Failure
+        0x1009: "NACK_DB_IS_FULL",  # The database is full
+        0x100A: "NACK_DB_IS_EMPTY",  # The database is empty
+        0x100B: "NACK_TURN_ERR",  # Obsolete, Invalid order of the enrollment (The order was not as: EnrollStart -> Enroll1 -> Enroll2 -> Enroll3)
+        0x100C: "NACK_BAD_FINGER",  # Too bad fingerprint
+        0x100D: "NACK_ENROLL_FAILED",  # Enrollment Failure
+        0x100E: "NACK_IS_NOT_SUPPORTED",  # The specified command is not supported
+        0x100F: "NACK_DEV_ERR",  # Device Error, especially if Crypto-Chip is trouble
+        0x1010: "NACK_CAPTURE_CANCELED",  # Obsolete, The capturing is canceled
+        0x1011: "NACK_INVALID_PARAM",  # Invalid parameter
+        0x1012: "NACK_FINGER_IS_NOT_PRESSED",  # Finger is not pressed
     }
 
     def __init__(self, bytes_):
@@ -137,8 +138,10 @@ class ResponsePacket(object):
         if is_little_endian:
             bytes_ = self.bytes_
         else:
-            values = struct.unpack('<BBHiHH', self.bytes_) # byte byte word dword word word
-            bytes_ = struct.pack('>BBHiHH', *values)
+            values = struct.unpack(
+                "<BBHiHH", self.bytes_
+            )  # byte byte word dword word word
+            bytes_ = struct.pack(">BBHiHH", *values)
         return hexlify(bytes_)
 
     def _unpack_bytes(self):
@@ -151,7 +154,7 @@ class ResponsePacket(object):
             If one of the start codes, device ID, or checksum is incorrect.
 
         """
-        values = struct.unpack('<BBHiHH', self.bytes_) # byte byte word dword word word
+        values = struct.unpack("<BBHiHH", self.bytes_)  # byte byte word dword word word
         # assert values[0] == self.START_CODE_1
         # assert values[1] == self.START_CODE_2
         # assert values[2] == self.DEVICE_ID
@@ -163,4 +166,6 @@ class ResponsePacket(object):
             self.parameter = values[3]
         else:
             self.error_code = values[3]
-            self.error = self.ERRORS.get(self.error_code, "DUPLICATE_ID_" + str(self.error_code))
+            self.error = self.ERRORS.get(
+                self.error_code, "DUPLICATE_ID_" + str(self.error_code)
+            )

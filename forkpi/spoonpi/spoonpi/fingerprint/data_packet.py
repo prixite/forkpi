@@ -1,6 +1,7 @@
 import struct
 from .byte_utils import *
 
+
 class DataPacket(object):
     """
     Packs / unpacks bytes that can be sent to / received from the FPS.
@@ -58,13 +59,13 @@ class DataPacket(object):
             When unpacking, if one of the start codes, device ID, or checksum is incorrect.
 
         """
-        assert bytes_ or data # one of them
-        assert not (bytes_ and data) # but not both
-        if bytes_: # unpack data from bytes
+        assert bytes_ or data  # one of them
+        assert not (bytes_ and data)  # but not both
+        if bytes_:  # unpack data from bytes
             self.bytes_ = bytes_
             self.data_length = len(bytes_) - 6
             self._unpack_bytes()
-        elif data: # pack data to bytes
+        elif data:  # pack data to bytes
             self.data = bytes(data)
             self.data_length = len(self.data)
             self._pack_bytes()
@@ -124,14 +125,19 @@ class DataPacket(object):
 
         """
         if is_little_endian:
-            byte_order = '<'
-        else: # big endian
-            byte_order = '>'
+            byte_order = "<"
+        else:  # big endian
+            byte_order = ">"
 
-        bytes_ = struct.pack(byte_order + 'BBH%ds' % self.data_length, # byte byte word dword word
-                self.START_CODE_1, self.START_CODE_2, self.DEVICE_ID, self.data)
+        bytes_ = struct.pack(
+            byte_order + "BBH%ds" % self.data_length,  # byte byte word dword word
+            self.START_CODE_1,
+            self.START_CODE_2,
+            self.DEVICE_ID,
+            self.data,
+        )
         checksum = byte_checksum(bytes_)
-        bytes_ += struct.pack(byte_order + 'H', checksum)
+        bytes_ += struct.pack(byte_order + "H", checksum)
         self.bytes_ = bytes_
         return self.bytes_
 
@@ -145,7 +151,9 @@ class DataPacket(object):
             If one of the start codes, device ID, or checksum is incorrect.
 
         """
-        values = struct.unpack('<BBH%dsH' % self.data_length, self.bytes_) # byte byte word var word
+        values = struct.unpack(
+            "<BBH%dsH" % self.data_length, self.bytes_
+        )  # byte byte word var word
         assert values[0] == self.START_CODE_1
         assert values[1] == self.START_CODE_2
         assert values[2] == self.DEVICE_ID

@@ -1,6 +1,7 @@
 import struct
 from .byte_utils import *
 
+
 class CommandPacket(object):
     """
     Packs commands and parameters into bytes that can be sent.
@@ -43,29 +44,29 @@ class CommandPacket(object):
     DEVICE_ID = 0x0001
 
     COMMANDS = {
-        'Open'                : 0x01, # Open Initialization
-        'Close'               : 0x02, # Close Termination
-        'ChangeBaudrate'      : 0x04, # ChangeBaudrate Change UART baud rate
-        'CmosLed'             : 0x12, # CmosLed Control CMOS LED
-        'GetEnrollCount'      : 0x20, # Get enrolled fingerprint count
-        'CheckEnrolled'       : 0x21, # Check whether the specified ID is already enrolled
-        'EnrollStart'         : 0x22, # Start an enrollment
-        'Enroll1'             : 0x23, # Make 1st template for an enrollment
-        'Enroll2'             : 0x24, # Make 2nd template for an enrollment
-        'Enroll3'             : 0x25, # Make 3rd template for an enrollment, merge three templates into one template, save merged template to the database
-        'IsPressFinger'       : 0x26, # Check if a finger is placed on the sensor
-        'DeleteID'            : 0x40, # Delete the fingerprint with the specified ID
-        'DeleteAll'           : 0x41, # Delete all fingerprints from the database
-        'Verify1_1'           : 0x50, # Verification of the capture fingerprint image with the specified ID
-        'Identify1_N'         : 0x51, # Identification of the capture fingerprint image with the database
-        'VerifyTemplate1_1'   : 0x52, # Verification of a fingerprint template with the specified ID
-        'IdentifyTemplate1_N' : 0x53, # Identification of a fingerprint template with the database
-        'CaptureFinger'       : 0x60, # Capture a fingerprint image(256x256) from the sensor
-        'MakeTemplate'        : 0x61, # Make template for transmission
-        'GetImage'            : 0x62, # Download the captured fingerprint image(256x256)
-        'GetRawImage'         : 0x63, # Capture & Download raw fingerprint image(320x240)
-        'GetTemplate'         : 0x70, # Download the template of the specified ID
-        'SetTemplate'         : 0x71, # Upload the template of the specified ID
+        "Open": 0x01,  # Open Initialization
+        "Close": 0x02,  # Close Termination
+        "ChangeBaudrate": 0x04,  # ChangeBaudrate Change UART baud rate
+        "CmosLed": 0x12,  # CmosLed Control CMOS LED
+        "GetEnrollCount": 0x20,  # Get enrolled fingerprint count
+        "CheckEnrolled": 0x21,  # Check whether the specified ID is already enrolled
+        "EnrollStart": 0x22,  # Start an enrollment
+        "Enroll1": 0x23,  # Make 1st template for an enrollment
+        "Enroll2": 0x24,  # Make 2nd template for an enrollment
+        "Enroll3": 0x25,  # Make 3rd template for an enrollment, merge three templates into one template, save merged template to the database
+        "IsPressFinger": 0x26,  # Check if a finger is placed on the sensor
+        "DeleteID": 0x40,  # Delete the fingerprint with the specified ID
+        "DeleteAll": 0x41,  # Delete all fingerprints from the database
+        "Verify1_1": 0x50,  # Verification of the capture fingerprint image with the specified ID
+        "Identify1_N": 0x51,  # Identification of the capture fingerprint image with the database
+        "VerifyTemplate1_1": 0x52,  # Verification of a fingerprint template with the specified ID
+        "IdentifyTemplate1_N": 0x53,  # Identification of a fingerprint template with the database
+        "CaptureFinger": 0x60,  # Capture a fingerprint image(256x256) from the sensor
+        "MakeTemplate": 0x61,  # Make template for transmission
+        "GetImage": 0x62,  # Download the captured fingerprint image(256x256)
+        "GetRawImage": 0x63,  # Capture & Download raw fingerprint image(320x240)
+        "GetTemplate": 0x70,  # Download the template of the specified ID
+        "SetTemplate": 0x71,  # Upload the template of the specified ID
     }
 
     def __init__(self, command_name, parameter=0):
@@ -102,7 +103,7 @@ class CommandPacket(object):
 
         """
         return self._pack_bytes(is_little_endian=True)
-  
+
     def serialize_bytes(self, is_little_endian=False):
         """
         Parameters
@@ -127,7 +128,7 @@ class CommandPacket(object):
         """
         bytes_ = self._pack_bytes(is_little_endian)
         return hexlify(bytes_)
-    
+
     def _pack_bytes(self, is_little_endian=True):
         """
         Packs this object's attributes into bytes according to the specified format.
@@ -145,12 +146,18 @@ class CommandPacket(object):
 
         """
         if is_little_endian:
-            byte_order = '<'
-        else: # big endian
-            byte_order = '>'
+            byte_order = "<"
+        else:  # big endian
+            byte_order = ">"
 
-        bytes_ = struct.pack(byte_order + 'BBHiH', # byte byte word dword/(signed int) word
-                self.START_CODE_1, self.START_CODE_2, self.DEVICE_ID, self.parameter, self.command_code)
+        bytes_ = struct.pack(
+            byte_order + "BBHiH",  # byte byte word dword/(signed int) word
+            self.START_CODE_1,
+            self.START_CODE_2,
+            self.DEVICE_ID,
+            self.parameter,
+            self.command_code,
+        )
         checksum = byte_checksum(bytes_)
-        bytes_ += struct.pack(byte_order + 'H', checksum)
+        bytes_ += struct.pack(byte_order + "H", checksum)
         return bytes_

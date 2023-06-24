@@ -5,14 +5,13 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('records', '0034_log_was_allowed'),
+        ("records", "0034_log_was_allowed"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='log',
-            name='action',
+            model_name="log",
+            name="action",
         ),
     ]

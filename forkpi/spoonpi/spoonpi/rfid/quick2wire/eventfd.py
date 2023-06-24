@@ -1,4 +1,3 @@
-
 from ctypes import *
 import quick2wire.syscall as syscall
 import os
@@ -19,43 +18,43 @@ eventfd = syscall.lookup(c_int, "eventfd", (c_uint, c_int))
 
 class Semaphore(syscall.SelfClosing):
     """A Semaphore implemented with eventfd that can be added to a Selector."""
-    
+
     def __init__(self, count=0, blocking=True):
         """Creates a Semaphore with an initial count.
-        
+
         Arguments:
         count -- the initial count.
         blocking -- if False calls to wait() do not block if the Semaphore
                     has a count of zero. (default = True)
         """
-        self._fd = eventfd(count, EFD_SEMAPHORE|((not blocking)*EFD_NONBLOCK))
-        
+        self._fd = eventfd(count, EFD_SEMAPHORE | ((not blocking) * EFD_NONBLOCK))
+
     def close(self):
         """Closes the Semaphore and releases its file descriptor."""
         os.close(self._fd)
-    
+
     def fileno(self):
         """Returns the Semaphore's file descriptor."""
         return self._fd
-    
+
     def signal(self):
         """Signal the semaphore.
-        
+
         Signalling a semaphore increments its count by one and wakes a
         blocked task that is waiting on the semaphore.
         """
         return os.write(self._fd, eventfd_t(1))
-    
+
     def wait(self):
         """Receive a signal from the Semaphore, decrementing its count by one.
-        
+
         If the Semaphore is already has a count of zero, either wait
         for a signal if the Semaphore is in blocking mode, or return
         False immediately.
-        
+
         Returns:
         True  -- the Semaphore received a signal.
-        False -- the Semaphore did not receive a signal and is in 
+        False -- the Semaphore did not receive a signal and is in
                  non-blocking mode.
         """
         try:

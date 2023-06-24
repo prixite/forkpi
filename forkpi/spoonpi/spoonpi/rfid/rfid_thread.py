@@ -3,12 +3,12 @@ import threading
 
 from .rfid_reader import RfidReader
 
-class RfidThread(threading.Thread):
 
+class RfidThread(threading.Thread):
     def __init__(self):
         super(RfidThread, self).__init__()
         self.rfid_reader = RfidReader()
-        self.rfid_uid = '' # The UID of the newly swiped RFID
+        self.rfid_uid = ""  # The UID of the newly swiped RFID
 
     def start_polling(self):
         self.is_polling = True
@@ -31,7 +31,7 @@ class RfidThread(threading.Thread):
             time.sleep(0.5)
 
     def _print(self, *args):
-        print('  [RFIDThread]', *args)
+        print("  [RFIDThread]", *args)
 
     def get_rfid_uid(self):
         self.tag_swiped = False

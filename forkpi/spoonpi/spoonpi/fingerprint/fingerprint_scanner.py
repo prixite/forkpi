@@ -10,6 +10,7 @@ from .command_packet import CommandPacket
 from .response_packet import ResponsePacket
 from .data_packet import DataPacket
 
+
 class FingerprintScanner(object):
     """
     Encapsulates communication with the Sparkfun fingerprint scanner.
@@ -39,7 +40,7 @@ class FingerprintScanner(object):
         True to print packets in little endian byte order, False for big endian.
 
     """
-    
+
     def __init__(self, debug=False, is_little_endian=False):
         """
         Parameters
@@ -60,16 +61,18 @@ class FingerprintScanner(object):
         self.debug = debug
         self.is_little_endian = is_little_endian
         try:
-            self._serial = serial.Serial(port='/dev/ttyAMA0', baudrate=9600, timeout=None)
+            self._serial = serial.Serial(
+                port="/dev/ttyAMA0", baudrate=9600, timeout=None
+            )
             self.open(timeout=0.1)
 
-            if self.open(): # baud rate 9600 succeeded -> change to 115200
+            if self.open():  # baud rate 9600 succeeded -> change to 115200
                 self.change_baudrate(115200)
-            else: # baud rate 9600 failed; maybe already set to 115200?
+            else:  # baud rate 9600 failed; maybe already set to 115200?
                 self._serial.setBaudrate(115200)
-                if self.open(): # baud rate 115200 succeeded
+                if self.open():  # baud rate 115200 succeeded
                     self._serial.flush()
-                else: # baud rate 115200 failed
+                else:  # baud rate 115200 failed
                     raise serial.SerialException()
 
         except serial.SerialException as e:
@@ -94,7 +97,7 @@ class FingerprintScanner(object):
             True if ack, False if nack or timeout.
 
         """
-        self._send_command('Open')
+        self._send_command("Open")
         response = self._receive_response(timeout=timeout)
         if response is None:
             return False
@@ -110,9 +113,9 @@ class FingerprintScanner(object):
         -------
         bool
             True if ack, False if nack.
-        
+
         """
-        response = self._run_command('Close')
+        response = self._run_command("Close")
         self._serial.close()
         return response.ack
 
@@ -131,7 +134,7 @@ class FingerprintScanner(object):
             True if ack, False if nack.
 
         """
-        response = self._run_command('CmosLed', parameter = 1 if on else 0)
+        response = self._run_command("CmosLed", parameter=1 if on else 0)
         return response.ack
 
     def backlight_on(self):
@@ -176,7 +179,7 @@ class FingerprintScanner(object):
         ----------
         baudrate : int
             Baudrate. Only 9600 or 115200 is recommended, but can be any integer in that range.
-        
+
         Returns
         -------
         bool
@@ -184,9 +187,12 @@ class FingerprintScanner(object):
 
         """
         if baudrate != self._serial.getBaudrate():
-            if self._run_command('ChangeBaudrate', parameter=baudrate):
+            if self._run_command("ChangeBaudrate", parameter=baudrate):
                 if self.debug:
-                    print('Changed baud rate from %s to %s' % (self._serial.getBaudrate(), baudrate))
+                    print(
+                        "Changed baud rate from %s to %s"
+                        % (self._serial.getBaudrate(), baudrate)
+                    )
                 self._serial.setBaudrate(baudrate)
                 return True
             else:
@@ -202,7 +208,7 @@ class FingerprintScanner(object):
             The total number of enrolled fingerprints.
 
         """
-        response = self._run_command('GetEnrollCount')
+        response = self._run_command("GetEnrollCount")
         return response.parameter
 
     def is_enrolled(self, tid):
@@ -218,7 +224,7 @@ class FingerprintScanner(object):
             True if the ID is enrolled, False if not (or invalid tid).
 
         """
-        response = self._run_command('CheckEnrolled', parameter=tid)
+        response = self._run_command("CheckEnrolled", parameter=tid)
         return response.ack
 
     def find_free_tid(self):
@@ -238,7 +244,7 @@ class FingerprintScanner(object):
 
     def enroll(self, stage, tid=-1, tries=3):
         """
-        Calling enroll with stage=1 starts the enrollment process, 
+        Calling enroll with stage=1 starts the enrollment process,
         calling it with stage=3:
             saves the merged template to the db (if tid>=0), or
             returns the template (if tid==-1)
@@ -274,14 +280,14 @@ class FingerprintScanner(object):
         assert tid >= -1 and tid <= 199
 
         if stage == 1:
-            if self._run_command('EnrollStart', parameter=tid):
-                self.backlight_on() # proceed to capture finger
+            if self._run_command("EnrollStart", parameter=tid):
+                self.backlight_on()  # proceed to capture finger
             else:
                 return False
 
         if self._capture_finger(tries):
-            if self._run_command('Enroll' + str(stage)):
-                pass # proceed to determine return value
+            if self._run_command("Enroll" + str(stage)):
+                pass  # proceed to determine return value
             else:
                 self.backlight_off()
                 return False
@@ -321,7 +327,7 @@ class FingerprintScanner(object):
             True if there is a finger on the scanner, False if not.
 
         """
-        response = self._run_command('IsPressFinger')
+        response = self._run_command("IsPressFinger")
         return response.parameter == 0
 
     def delete_template(self, tid):
@@ -337,7 +343,7 @@ class FingerprintScanner(object):
             True if successful, False if tid is invalid.
 
         """
-        response = self._run_command('DeleteID', parameter=tid)
+        response = self._run_command("DeleteID", parameter=tid)
         return response.ack
 
     def delete_all(self):
@@ -350,7 +356,7 @@ class FingerprintScanner(object):
             True if successful, False if db is empty.
 
         """
-        response = self._run_command('DeleteAll')
+        response = self._run_command("DeleteAll")
         return response.ack
 
     def verify_finger(self, tid, tries=3):
@@ -371,11 +377,11 @@ class FingerprintScanner(object):
 
         """
         if self._capture_finger(high_quality=False, tries=tries):
-            response = self._run_command('Verify1_1', parameter=tid)
+            response = self._run_command("Verify1_1", parameter=tid)
             return response.ack
         else:
             return False
-    
+
     def identify_finger(self, tries=3):
         """
         Captures a finger and identifies it among all templates in the db.
@@ -392,7 +398,7 @@ class FingerprintScanner(object):
 
         """
         if self._capture_finger(high_quality=False, tries=tries):
-            response = self._run_command('Identify1_N')
+            response = self._run_command("Identify1_N")
             return response.parameter if response.ack else -1
         else:
             return -1
@@ -414,7 +420,7 @@ class FingerprintScanner(object):
             True if the templates match, False if they don't.
 
         """
-        if self._run_command('VerifyTemplate1_1', parameter=tid):
+        if self._run_command("VerifyTemplate1_1", parameter=tid):
             self._send_data(data=template)
             response = self._receive_response()
             return response.ack
@@ -435,7 +441,7 @@ class FingerprintScanner(object):
             ID of the first db template that matched, -1 if no match.
 
         """
-        if self._run_command('IdentifyTemplate1_N'):
+        if self._run_command("IdentifyTemplate1_N"):
             self._send_data(data=template)
             response = self._receive_response()
             if response.ack:
@@ -458,7 +464,7 @@ class FingerprintScanner(object):
 
         """
         if self._capture_finger(high_quality=True, tries=tries):
-            if self._run_command('MakeTemplate'):
+            if self._run_command("MakeTemplate"):
                 data = self._receive_data(498)
                 return data
         return None
@@ -480,7 +486,7 @@ class FingerprintScanner(object):
 
         """
         if self._capture_finger(high_quality=True, tries=tries):
-            if self._run_command('GetImage'):
+            if self._run_command("GetImage"):
                 data = self._receive_data(52116)
                 return data
         return None
@@ -498,7 +504,7 @@ class FingerprintScanner(object):
 
         """
         self.backlight_on()
-        if self._run_command('GetRawImage'):
+        if self._run_command("GetRawImage"):
             data = self._receive_data(19200)
             self.backlight_off()
             return data
@@ -518,9 +524,9 @@ class FingerprintScanner(object):
         -------
         bytes (498)
             The template requested, None if invalid position or tid is not used.
-        
+
         """
-        if self._run_command('GetTemplate', parameter=tid):
+        if self._run_command("GetTemplate", parameter=tid):
             data = self._receive_data(498)
             return data
         return None
@@ -540,10 +546,10 @@ class FingerprintScanner(object):
         -------
         bool
             True if successful, False if tid is invalid.
-        
+
         """
         # the addition of 0x00ff0000 below is so that duplication check is not performed
-        if self._run_command('SetTemplate', parameter=0x00ff0000 + tid):
+        if self._run_command("SetTemplate", parameter=0x00FF0000 + tid):
             self._send_data(data=template)
             response = self._receive_response()
             return response.ack
@@ -564,15 +570,15 @@ class FingerprintScanner(object):
         -------
         bool
             True if successful, False if no finger detected for `tries` times.
-        
+
         """
         self.backlight_on()
         for i in range(tries):
-            if self._run_command('CaptureFinger', parameter = 1 if high_quality else 0):
+            if self._run_command("CaptureFinger", parameter=1 if high_quality else 0):
                 return True
-            elif i == tries - 1: # give up
+            elif i == tries - 1:  # give up
                 return False
-            else: # try again
+            else:  # try again
                 self._wait(0.5)
 
     def _run_command(self, *args, **kwargs):
@@ -583,7 +589,7 @@ class FingerprintScanner(object):
         -------
         ResponsePacket
             The response received.
-        
+
         """
         self._send_command(*args, **kwargs)
         response = self._receive_response()
@@ -602,12 +608,14 @@ class FingerprintScanner(object):
         Returns
         -------
         None
-        
+
         """
         command = CommandPacket(*args, **kwargs)
         if self.debug:
-            print('\nCommand:', command.name)
-            print('sent:', command.serialize_bytes(is_little_endian=self.is_little_endian))
+            print("\nCommand:", command.name)
+            print(
+                "sent:", command.serialize_bytes(is_little_endian=self.is_little_endian)
+            )
         self._serial.write(bytes(command))
 
     def _receive_response(self, timeout=3):
@@ -624,21 +632,24 @@ class FingerprintScanner(object):
         -------
         ResponsePacket
             The response received from the FPS, None if read timed out.
-        
+
         """
         self._serial.setTimeout(timeout)
         bytes_ = self._serial.read(size=12)
 
         if len(bytes_) < 12:
             if self.debug:
-                print('read:')
+                print("read:")
             return None
-        
+
         response = ResponsePacket(bytes_)
         if self.debug:
-            print('read:', response.serialize_bytes(is_little_endian=self.is_little_endian))
+            print(
+                "read:",
+                response.serialize_bytes(is_little_endian=self.is_little_endian),
+            )
             if not response.ack:
-                print('ERROR:', response.error)
+                print("ERROR:", response.error)
         return response
 
     def _send_data(self, data):
@@ -653,12 +664,14 @@ class FingerprintScanner(object):
         Returns
         -------
         None
-        
+
         """
         packet = DataPacket(data=data)
         if self.debug:
-            print('data:', packet.serialize_bytes(is_little_endian=self.is_little_endian))
-            print('dlen:', len(packet.data))
+            print(
+                "data:", packet.serialize_bytes(is_little_endian=self.is_little_endian)
+            )
+            print("dlen:", len(packet.data))
         self._serial.write(bytes(packet))
 
     def _receive_data(self, data_length, timeout=10):
@@ -677,9 +690,11 @@ class FingerprintScanner(object):
         -------
         bytes
             `data_length` bytes of data (not the entire packet) received.
-        
+
         """
-        packet_length = data_length + 6 # the +6 comes from the other non-data parts of the packet
+        packet_length = (
+            data_length + 6
+        )  # the +6 comes from the other non-data parts of the packet
 
         self._serial.setTimeout(timeout)
         bytes_ = self._serial.read(size=packet_length)
@@ -689,12 +704,14 @@ class FingerprintScanner(object):
 
         packet = DataPacket(bytes_=bytes_)
         if self.debug:
-            print('data:', packet.serialize_bytes(is_little_endian=self.is_little_endian))
-            print('dlen:', len(packet.data))
+            print(
+                "data:", packet.serialize_bytes(is_little_endian=self.is_little_endian)
+            )
+            print("dlen:", len(packet.data))
         return packet.data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fps = FingerprintScanner(debug=False)
     # fps.backlight_on()
     # for i in range(10):
@@ -707,7 +724,6 @@ if __name__ == '__main__':
     # template = fps.enroll_template(tries=3)
     # fps = FingerprintScanner(debug=True)
     template = fps.enroll_template(tries=3)
-
 
     # Identification
     # identify_iid = fps.identify_finger(tries=3)
@@ -727,7 +743,7 @@ if __name__ == '__main__':
     # print fps.verify_finger(tid=4, tries=3)
 
     # fps.make_image()
-    
+
     # from test_raw import SaveImage
     # SaveImage('fingerprint1.raw', fps.make_raw_image())
     # print(fps.make_raw_image())

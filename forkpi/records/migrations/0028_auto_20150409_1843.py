@@ -5,15 +5,14 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('records', '0027_auto_20150409_1709'),
+        ("records", "0027_auto_20150409_1709"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='log',
-            old_name='is_fingerprint_used',
-            new_name='used_fingerprint',
+            model_name="log",
+            old_name="is_fingerprint_used",
+            new_name="used_fingerprint",
         ),
     ]

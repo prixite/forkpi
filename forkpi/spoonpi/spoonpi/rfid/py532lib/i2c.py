@@ -25,12 +25,15 @@ class Pn532_i2c:
     I2C communication with the PN532.
 
     """
+
     PN532 = None
     address = None
     i2c_channel = None
     logger = None
 
-    def __init__(self, address=PN532_I2C_SLAVE_ADDRESS, i2c_channel=RPI_DEFAULT_I2C_NEW):
+    def __init__(
+        self, address=PN532_I2C_SLAVE_ADDRESS, i2c_channel=RPI_DEFAULT_I2C_NEW
+    ):
         """Constructor for the Pn532_i2c class.
 
         Arguments:
@@ -66,16 +69,14 @@ class Pn532_i2c:
     def read_response(self):
         """Wait, then read for a response from the PN532."""
         logging.debug("readResponse...")
-        response = [b'\x00\x00\x00\x00\x00\x00\x00']
+        response = [b"\x00\x00\x00\x00\x00\x00\x00"]
 
         while True:
-
             try:
                 logging.debug("readResponse..............Reading.")
 
                 sleep(DEFAULT_DELAY)
-                response = self.PN532.transaction(
-                    reading(self.address, 255))
+                response = self.PN532.transaction(reading(self.address, 255))
                 logging.debug(response)
                 logging.debug("readResponse..............Read.")
             except Exception:
@@ -86,8 +87,7 @@ class Pn532_i2c:
 
                     # Acknowledge Data frames coming from the PN532
                     if frame.get_frame_type() == PN532_FRAME_TYPE_DATA:
-                        self.send_command(Pn532Frame(
-                            frame_type=PN532_FRAME_TYPE_ACK))
+                        self.send_command(Pn532Frame(frame_type=PN532_FRAME_TYPE_ACK))
 
                 except Exception as ex:
                     logging.debug(ex)
@@ -110,8 +110,7 @@ class Pn532_i2c:
                 logging.debug("send_command...........Sending.")
 
                 sleep(DEFAULT_DELAY)
-                self.PN532.transaction(
-                    writing(self.address, frame.to_tuple()))
+                self.PN532.transaction(writing(self.address, frame.to_tuple()))
 
                 logging.debug(frame.to_tuple())
 
@@ -139,7 +138,10 @@ class Pn532_i2c:
 
     def read_mifare(self):
         """Wait for a MiFARE card to be in the PN532's field, and read it's UID."""
-        frame = Pn532Frame(frame_type=PN532_FRAME_TYPE_DATA, data=bytearray([PN532_COMMAND_INLISTPASSIVETARGET, 0x01, 0x00]))
+        frame = Pn532Frame(
+            frame_type=PN532_FRAME_TYPE_DATA,
+            data=bytearray([PN532_COMMAND_INLISTPASSIVETARGET, 0x01, 0x00]),
+        )
         self.send_command_check_ack(frame)
 
         return self.read_response()
@@ -162,12 +164,17 @@ class Pn532_i2c:
 
         """
         if frame is None:
-            frame = Pn532Frame(frame_type=PN532_FRAME_TYPE_DATA,
-                               data=bytearray(
-                                   [PN532_COMMAND_SAMCONFIGURATION,
-                                    PN532_SAMCONFIGURATION_MODE_NORMAL,
-                                    PN532_SAMCONFIGURATION_TIMEOUT_50MS,
-                                    PN532_SAMCONFIGURATION_IRQ_OFF]))
+            frame = Pn532Frame(
+                frame_type=PN532_FRAME_TYPE_DATA,
+                data=bytearray(
+                    [
+                        PN532_COMMAND_SAMCONFIGURATION,
+                        PN532_SAMCONFIGURATION_MODE_NORMAL,
+                        PN532_SAMCONFIGURATION_TIMEOUT_50MS,
+                        PN532_SAMCONFIGURATION_IRQ_OFF,
+                    ]
+                ),
+            )
 
         self.send_command_check_ack(frame)
 

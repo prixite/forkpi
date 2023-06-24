@@ -5,8 +5,8 @@ try:
 except ImportError:
     from .py532lib import mifare as mifare
 
-class RfidReader():
 
+class RfidReader:
     def __init__(self):
         self.mifare = mifare.Mifare()
         self.mifare.SAMconfigure()
