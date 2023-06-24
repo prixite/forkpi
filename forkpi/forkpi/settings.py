@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -63,14 +64,13 @@ WSGI_APPLICATION = "forkpi.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "forkpi",
-        "USER": "pi",
-        "PASSWORD": "raspberry",
-        "HOST": "forkpi.local",  # Empty for localhost through domain sockets or'127.0.0.1' for localhost through TCP.
-        "PORT": "5432",  # Set to empty string for default.
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+
+if "DATABASE_URL" in os.environ:
+    DATABASES["default"] = dj_database_url.parse(os.environ.get("DATABASE_URL"))
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

@@ -5,3 +5,4 @@
 *.bmp
 venv
 .env
+db.sqlite3
