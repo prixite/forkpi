@@ -3,3 +3,4 @@ python-dotenv==0.9.1
 dj-database-url==0.5.0
 pycrypto==2.6.1
 quick2wire-api==0.0.0.2
+pyserial==3.5
