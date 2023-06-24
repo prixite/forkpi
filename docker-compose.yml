@@ -11,6 +11,7 @@ services:
     container_name: forkpi
     volumes:
       - ./forkpi:/opt/code
+    command: bash -c 'python manage.py runserver 0.0.0.0:8000'
     depends_on:
       - db
 
