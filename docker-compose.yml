@@ -8,8 +8,6 @@ services:
       - ./forkpi/.env
     container_name: forkpi
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
-    depends_on:
-      - db
     volumes:
       - ./forkpi:/opt/code
       - static_volume:/opt/code/static
