@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  forkpi:
+    build:
+      context: .
+      dockerfile: ./forkpi/Dockerfile
+    env_file:
+      - ./forkpi/.env
+    ports:
+      - 8000:8000
+    container_name: forkpi
+    volumes:
+      - ./forkpi:/opt/code
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:13.4
+    env_file:
+      - ./forkpi/.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
