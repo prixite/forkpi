@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from . import secret_key
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -19,9 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY_PATH = '/etc/forkpi_secret_key.txt'
-
-SECRET_KEY = secret_key.read_secret_key(SECRET_KEY_PATH)
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
