@@ -26,14 +26,6 @@ services:
       - static_volume:/opt/code/static
       - shm:/dev/shm
 
-  db:
-    image: postgres:13.4
-    env_file:
-      - ./forkpi/.env
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
 volumes:
-  pgdata:
   static_volume:
   shm:
