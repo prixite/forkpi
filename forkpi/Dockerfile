@@ -16,9 +16,9 @@ RUN apt-get update && \
 	tar -xvf Python-3.2.4.tgz && \
 	cd Python-3.2.4
 
-#RUN ./configure && \
-#  make && \
-#	make install
+RUN ./configure --enable-optimizations && \
+  make && \
+	make install
 
 #WORKDIR /opt/code
 #

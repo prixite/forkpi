@@ -3,7 +3,7 @@ services:
   forkpi:
     build:
       context: .
-      dockerfile: ./forkpi/Dockerfile
+      dockerfile: ./forkpi/local.Dockerfile
     env_file:
       - ./forkpi/.env
     ports:
