@@ -141,9 +141,10 @@ def is_valid_keypair_fingerprint(kid):
 def new_keypair(request):
     name = request.POST["name"]
     pin = request.POST["pin"]
+    phone_number = request.POST["phone_number"]
     rfid_uid = request.POST["rfid_uid"]
     fingerprint_template = request.POST["fingerprint_template"]
-    door_ids = request.POST["doors"]
+    door_ids = None  # Get default door here
 
     is_error = False
 
@@ -173,6 +174,7 @@ def new_keypair(request):
 
     keypair = Keypair.objects.create(
         name=name,
+        phone_number=phone_number,
         pin=encrypt(pin),
         rfid_uid=encrypt(rfid_uid),
         hash_pin=hashpin,
