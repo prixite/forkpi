@@ -32,7 +32,7 @@ def get_user_actions(request):
             )
 
             userActions.append(
-                {"name": "Users" + unapproved_count, "url": reverse("users")}
+                {"name": "Admins" + unapproved_count, "url": reverse("users")}
             )
             userActions.append({"name": "Options", "url": reverse("options")})
 
