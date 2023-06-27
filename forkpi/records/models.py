@@ -9,6 +9,7 @@ class Keypair(Model):
     is_active = BooleanField(default=True)
 
     doors = ManyToManyField("Door")
+    phone_number = CharField(max_length=20, default="", null=True, blank=True)
 
     pin = TextField(default="", null=True, blank=True)
     rfid_uid = TextField(default="", null=True, blank=True)
