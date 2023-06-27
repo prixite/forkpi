@@ -3,9 +3,9 @@
 {% block content %}
 
 <ul class="nav nav-tabs">
-	<li class="active"><a href="#activated-keypairs" data-toggle="tab">View and Edit Keypairs</a></li>
-	<li><a href="#deactivated-keypairs" data-toggle="tab">Deactivated Keypairs</a></li>
-	<li><a href="#new-keypair" data-toggle="tab">Add New Keypair</a></li>
+	<li class="active"><a href="#activated-keypairs" data-toggle="tab">View and Edit Members</a></li>
+	<li><a href="#deactivated-keypairs" data-toggle="tab">Deactivated Members</a></li>
+	<li><a href="#new-keypair" data-toggle="tab">Add New Member</a></li>
 </ul>
 <input type="hidden" id="scan-url-thrice" value="{% url 'scan fingerprint 3x' %}" />
 
@@ -61,7 +61,7 @@
 		  	</span>
 	  	</span>
 	  	<hr style="clear:both;"/>
-		<div style="font-weight: bold">PIN:</div>
+		<div style="font-weight: bold">Perosonal PIN:</div>
 		<span class="edit-pin" data-post-url="{% url 'edit keypair pin' %}"
 			  data-field="pin">
 		  	<span class="editable-text">
@@ -96,32 +96,32 @@
 		<div class="col-md-10 col-md-offset-1">
 			<form class="form-horizontal" accept-charset="UTF-8" method="post" action="{% url 'add keypair' %}">
 				<div class="form-group">
-					<label for="name" class="col-md-2 control-label">Name</label>
-					<div class="col-md-10">
+					<label for="name" class="col-md-3 control-label">Member Number</label>
+					<div class="col-md-9">
 						<input type="text" class="form-control required"
 							   id="newName" name="name"
-							   placeholder="John Smith" />
+							   placeholder="22" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="doors" class="col-md-2 control-label">Doors</label>
-					<div class="col-md-10" data-search-url="{% url 'search doors' %}">
+					<label for="doors" class="col-md-3 control-label">Doors</label>
+					<div class="col-md-9" data-search-url="{% url 'search doors' %}">
 						<input type="text" class="form-control"
 							   id="newDoors" name="doors" placeholder="Enter door name."/>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="pin" class="col-md-2 control-label">PIN</label>
-					<div class="col-md-10">
+					<label for="pin" class="col-md-3 control-label">Perosonal PIN</label>
+					<div class="col-md-9">
 						<input type="password" class="form-control"
 							   id="newPin" name="pin" 
 							   placeholder="Enter numeric PIN, 4 characters minimum."/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="rfid_uid" class="col-md-2 control-label">RFID UID</label>
-					<div class="col-md-8">
+					<label for="rfid_uid" class="col-md-3 control-label">RFID UID</label>
+					<div class="col-md-7">
 						<input type="text" class="form-control required-rfid-fingerprint"
 							   id="newRfid" name="rfid_uid"
 							   placeholder="Scan for an RFID tag or paste the UID here." />
@@ -133,8 +133,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="fingerprint_template" class="col-md-2 control-label">Fingerprint</label>
-					<div class="col-md-8">
+					<label for="fingerprint_template" class="col-md-3 control-label">Fingerprint</label>
+					<div class="col-md-7">
 						<input type="text" class="form-control required-rfid-fingerprint"
 							   id="newFinger" name="fingerprint_template"
 							   placeholder="Scan for a finger or paste the template here." />
@@ -147,7 +147,7 @@
 				</div>
 
 				<div class="form-group">
-					<div class="col-md-10 col-md-offset-2">
+					<div class="col-md-9 col-md-offset-3">
 						<button class="btn expand btn-primary signup-button" type="submit">
 							Add to Keypairs
 						</button>
@@ -340,7 +340,7 @@
 								Doors
 							</th>
 							<th class="col-md-1" data-placeholder="Y/N" data-tablesaw-priority="3">
-								<span class="glyphicon glyphicon-th mouseover-text" title="PIN"></span>
+								<span class="glyphicon glyphicon-th mouseover-text" title="Personal PIN"></span>
 							</th>
 							<th class="col-md-1" data-placeholder="Y/N" data-tablesaw-priority="4">
 								<span class="glyphicon glyphicon-credit-card mouseover-text" title="RFID UID"></span>
