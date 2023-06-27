@@ -211,23 +211,13 @@
 								</span>
 							</td>
 
-							<!-- Doors -->
-							<td data-search-url="{% url 'search doors' %}"
-								data-link-url="{% url 'link door to keypair' %}"
-								data-unlink-url="{% url 'unlink door from keypair' %}"
-								data-field="doors"
-								data-id="{{ keypair.id }}" data-value="{{ keypair.doors_json }}">
-								
-								<span class="editable-text">
-									{% if keypair.doors_json %}
-										{% for door in keypair.doors_json %}
-										<li class="token-input-token-facebook">
-											{{ door.name }}
-										</li>
-										{% endfor %}
-									{% else %}
-										- - -
-									{% endif %}
+							<!-- Phone Number -->
+							<td id="name-{{ keypair.id }}"
+								data-field="phone_number"
+								data-id="{{ keypair.id }}" data-value="{{ keypair.phone_number }}">
+
+								<span>
+									{{ keypair.phone_number }}
 								</span>
 							</td>
 
