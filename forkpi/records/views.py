@@ -21,7 +21,7 @@ def get_login_text(request):
 def get_user_actions(request):
     if request.user.is_authenticated():
         userActions = list()
-        userActions.append({"name": "Keypairs", "url": reverse("keypairs")})
+        userActions.append({"name": "Members", "url": reverse("keypairs")})
         userActions.append({"name": "Doors", "url": reverse("doors")})
         userActions.append({"name": "Logs", "url": reverse("logs")})
 
