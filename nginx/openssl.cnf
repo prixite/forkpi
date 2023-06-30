@@ -19,6 +19,7 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1 = localhost
 DNS.2 = payphone.floridapanthers.bar
+IP.1 = 10.156.108.2
 
 [v3_ext]
 authorityKeyIdentifier=keyid,issuer:always
