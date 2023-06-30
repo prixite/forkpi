@@ -6,9 +6,24 @@ services:
       dockerfile: ./forkpi/Dockerfile
     env_file:
       - ./forkpi/.env
-    ports:
-      - 80:8000
     container_name: forkpi
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
     volumes:
       - ./forkpi:/opt/code
+      - static_volume:/opt/code/static
+      - shm:/dev/shm
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - forkpi
+    volumes:
+      - static_volume:/opt/code/static
+      - shm:/dev/shm
+
+volumes:
+  static_volume:
+  shm:
