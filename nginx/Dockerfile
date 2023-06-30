@@ -1,7 +1,7 @@
-FROM nginx:1.17.6-alpine
+FROM nginx:1.17.6
 
-RUN apk update \
-    && apk add --no-cache openssl \
+RUN apt update \
+    && apt install -y openssl \
     && mkdir /etc/nginx/ssl
 
 # Generate a configuration file for openssl
