@@ -7,7 +7,7 @@ services:
     env_file:
       - ./forkpi/.env
     container_name: forkpi
-    command: bash -c 'python manage.py runserver 0.0.0.0:8000'
+    command: bash -c './scripts/run-gunicorn'
     volumes:
       - ./forkpi:/opt/code
       - static_volume:/opt/code/static
