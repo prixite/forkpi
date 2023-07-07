@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from .views import *
+from .views import add_admin
 
 urlpatterns = patterns(
     "",
@@ -12,6 +13,7 @@ urlpatterns = patterns(
     url(r"^mustbeloggedin$", must_be_logged_in, name="must be logged in"),
     url(r"^signup/$", signup_page, name="signup"),
     url(r"^adduser$", add_user, name="add user"),
+    url(r"^addadmin$", add_admin, name="add admin"),
     url(r"^keypairs/$", keypairs_page, name="keypairs"),
     url(r"^keypairs/add$", new_keypair, name="add keypair"),
     url(r"^keypairs/edit/name$", edit_keypair_name, name="edit keypair name"),

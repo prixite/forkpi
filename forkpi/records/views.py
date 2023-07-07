@@ -85,6 +85,7 @@ from .subviews.signup import signup_page, add_user
 from .subviews.logs import logs_page, delete_logs_older_than
 from .subviews.users import (
     all_users,
+    add_admin,
     user_toggle_active,
     user_toggle_staff,
     delete_user,

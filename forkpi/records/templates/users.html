@@ -1,134 +1,177 @@
 {% extends 'base.html' %}
 
 {% block content%}
-	{% csrf_token %}
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row col-md-12">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Admins</b></h3>
-						<div class="pull-right">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#admin-list" data-toggle="tab">View Admins</a></li>
+		<li><a href="#add-new-admin" data-toggle="tab">Add New Admin</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane" id="add-new-admin">
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+					<form accept-charset="UTF-8" action={% url 'add admin' %} method="post">
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Username</label>
+							<div class="col-md-9">
+								<input type="text"
+							 		class="form-control required"
+									id="newName" name="username"
+									placeholder="Username" />
+							</div>
 						</div>
-					</div>
-					<table id="keypairs-table" class="table table-hover tablesorter" data-sortList="[[0,0]]">
-						<thead>
-							<tr>
-								<!--th class="col-md-1" data-placeholder="Search..."># </th-->
-								<th class="col-md-1" data-placeholder="Search...">Username </th>
-								<th class="col-md-2" data-placeholder="Search...">Phone Number</th>
-								<th class="col-md-2" data-placeholder="Search...">Last Login</th>
-								<th class="col-md-2" data-placeholder="Search...">Join Date</th>
-								<th class="col-md-2" data-placeholder="Search...">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for user in users %}
-							<tr id="user-{{ user.id }}" class="
-								{% if not user.is_active %}
-									greyed
-								{% endif %}
-								{% if not user.is_superuser %}
-									redded
-								{% endif %}
-							">
-								<!--td>{{ user.id }}</td-->
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Email Address</label>
+							<div class="col-md-9">
+								<input type="text"
+							 		class="form-control required"
+									id="newName" name="email"
+									placeholder="Email Address" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Password</label>
+							<div class="col-md-9">
+								<input type="password"
+							 		class="form-control required"
+									id="newName" name="password"
+									placeholder="Password" />
+							</div>
+						</div>
+						{% csrf_token %}
+						<button class="btn btn-primary col-md-12 signup-button" style="margin-top: 15px; padding: 5px" type="submit">Add</button>		
+					</form>
+				</div>
+			</div>
+		</div>
 
-								<!-- Username -->
-								<td>																
-									<span
-										id="star-{{ user.id }}"
-										class="glyphicon glyphicon-star small-text"
-										style="
-										{% if not user.is_staff %}
-											display: none;
-										{% endif %}
-										"
-									></span>
-									<!-- unapproved user -->
-									{% if not user.is_superuser %}
-										<span class="invisible">0</span>
-										<span id="unapproved-{{ user.id }}" class="small-text glyphicon glyphicon-exclamation-sign"></span>
+		<div class="tab-pane active" id="admin-list">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Admins</b></h3>
+							<div class="pull-right">
+							</div>
+						</div>
+						<table id="keypairs-table" class="table table-hover tablesorter" data-sortList="[[0,0]]">
+							<thead>
+								<tr>
+									<!--th class="col-md-1" data-placeholder="Search..."># </th-->
+									<th class="col-md-1" data-placeholder="Search...">Username </th>
+									<th class="col-md-2" data-placeholder="Search...">Email</th>
+									<th class="col-md-2" data-placeholder="Search...">Last Login</th>
+									<th class="col-md-2" data-placeholder="Search...">Join Date</th>
+									<th class="col-md-2" data-placeholder="Search...">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in users %}
+								<tr id="user-{{ user.id }}" class="
+									{% if not user.is_active %}
+										greyed
 									{% endif %}
-									{{ user.username }}
-								</td>
+									{% if not user.is_superuser %}
+										redded
+									{% endif %}
+								">
+									<!--td>{{ user.id }}</td-->
 
-								<!-- Email and Name -->
-								<td>
-									{{ user.email }}<br/>
-									{{ user.first_name }} {{ user.last_name }}
-								</td>
-
-								<!-- Dates -->
-								<td>
-									{{ user.last_login | date:"Y-m-d H:i"}}
-								</td>
-								<td>
-									{{ user.date_joined | date:"Y-m-d H:i"}}
-								</td>
-
-								<!-- Actions -->
-								<td>
-								<div class="btn-group btn-group-justified" role="group">
-									{% if user.is_superuser %}
-									<!-- Actions for approved users -->
-										<!-- Promote / Demote -->
-										<div class="btn-group" role="group"
-											 data-post-url="{% url 'user toggle staff' %}" data-id="{{ user.id }}">
-											{% if user.is_staff %}
-												<button class="btn btn-warning demote-btn">
-													Demote
-												</button>
-											{% else %}
-												<button class="btn btn-success promote-btn">
-													Promote
-												</button>
+									<!-- Username -->
+									<td>																
+										<span
+											id="star-{{ user.id }}"
+											class="glyphicon glyphicon-star small-text"
+											style="
+											{% if not user.is_staff %}
+												display: none;
 											{% endif %}
-										</div>
-										<!-- Activate / Deactivate -->
-										<div class="btn-group" role="group"
-											 data-post-url="{% url 'user toggle active' %}" data-id="{{ user.id }}">
-											{% if user.is_active %}
-												<button class="btn btn-warning user-deactivate-btn deactivate-btn">
-													Deactivate
+											"
+										></span>
+										<!-- unapproved user -->
+										{% if not user.is_superuser %}
+											<span class="invisible">0</span>
+											<span id="unapproved-{{ user.id }}" class="small-text glyphicon glyphicon-exclamation-sign"></span>
+										{% endif %}
+										{{ user.username }}
+									</td>
+
+									<!-- Email and Name -->
+									<td>
+										{{ user.email }}<br/>
+										{{ user.first_name }} {{ user.last_name }}
+									</td>
+
+									<!-- Dates -->
+									<td>
+										{{ user.last_login | date:"Y-m-d H:i"}}
+									</td>
+									<td>
+										{{ user.date_joined | date:"Y-m-d H:i"}}
+									</td>
+
+									<!-- Actions -->
+									<td>
+									<div class="btn-group btn-group-justified" role="group">
+										{% if user.is_superuser %}
+										<!-- Actions for approved users -->
+											<!-- Promote / Demote -->
+											<div class="btn-group" role="group"
+												 data-post-url="{% url 'user toggle staff' %}" data-id="{{ user.id }}">
+												{% if user.is_staff %}
+													<button class="btn btn-warning demote-btn">
+														Demote
+													</button>
+												{% else %}
+													<button class="btn btn-success promote-btn">
+														Promote
+													</button>
+												{% endif %}
+											</div>
+											<!-- Activate / Deactivate -->
+											<div class="btn-group" role="group"
+												 data-post-url="{% url 'user toggle active' %}" data-id="{{ user.id }}">
+												{% if user.is_active %}
+													<button class="btn btn-warning user-deactivate-btn deactivate-btn">
+														Deactivate
+													</button>
+												{% else %}
+													<button class="btn btn-success user-activate-btn activate-btn">
+														Activate
+													</button>
+												{% endif %}
+											</div>
+											<!-- Delete -->
+											<div class="btn-group" role="group"
+												 data-post-url="{% url 'delete user' %}" data-id="{{ user.id }}">
+												<button class="btn btn-danger delete-btn">
+													Delete
 												</button>
-											{% else %}
-												<button class="btn btn-success user-activate-btn activate-btn">
-													Activate
-												</button>
-											{% endif %}
-										</div>
-										<!-- Delete -->
+											</div>
+										{% else %}
+										<!-- Actions for pending users -->
 										<div class="btn-group" role="group"
-											 data-post-url="{% url 'delete user' %}" data-id="{{ user.id }}">
-											<button class="btn btn-danger delete-btn">
-												Delete
+											 data-post-url="{% url 'approve user' %}" data-id="{{ user.id }}">
+											<button class="btn btn-success approve-btn">
+												Approve
 											</button>
 										</div>
-									{% else %}
-									<!-- Actions for pending users -->
-									<div class="btn-group" role="group"
-										 data-post-url="{% url 'approve user' %}" data-id="{{ user.id }}">
-										<button class="btn btn-success approve-btn">
-											Approve
-										</button>
-									</div>
-									<div class="btn-group" role="group"
-										 data-post-url="{% url 'delete user' %}" data-id="{{ user.id }}">
-										<button class="btn btn-danger deny-btn">
-											Deny
-										</button>
-									</div>
-									{% endif %}
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+										<div class="btn-group" role="group"
+											 data-post-url="{% url 'delete user' %}" data-id="{{ user.id }}">
+											<button class="btn btn-danger deny-btn">
+												Deny
+											</button>
+										</div>
+										{% endif %}
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 
 {% endblock %}
