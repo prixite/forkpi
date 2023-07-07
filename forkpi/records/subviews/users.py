@@ -29,7 +29,7 @@ def add_admin(request):
 
     if username.strip() == "" or password.strip() == "" or email.strip() == "":
         messages.add_message(request, messages.ERROR, "All the fields are required.")
-        return redirect_to_name("index")
+        return redirect_to_name("users")
 
     try:
         User.objects.create_superuser(username=username, email=email, password=password)
