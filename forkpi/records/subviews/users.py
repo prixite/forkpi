@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models.query import IntegrityError
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from records.views import render, redirect_to_name
@@ -12,6 +13,32 @@ def all_users(request):
         return render(request, "users.html", {"users": users})
     else:
         return redirect_to_name("index")
+
+
+@login_required
+def add_admin(request):
+    if request.META["REQUEST_METHOD"] != "POST":
+        return redirect_to_name("users")
+
+    if not request.user.is_staff:
+        return redirect_to_name("users")
+
+    username = request.POST["username"]
+    password = request.POST["password"]
+    email = request.POST["email"]
+
+    if username.strip() == "" or password.strip() == "" or email.strip() == "":
+        messages.add_message(request, messages.ERROR, "All the fields are required.")
+        return redirect_to_name("index")
+
+    try:
+        User.objects.create_superuser(username=username, email=email, password=password)
+    except IntegrityError:
+        messages.add_message(request, messages.ERROR, "Admin already exists")
+    else:
+        messages.add_message(request, messages.SUCCESS, "Admin successfully added.")
+
+    return redirect_to_name("users")
 
 
 @login_required

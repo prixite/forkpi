@@ -8,6 +8,41 @@
 
 	<div class="tab-content">
 		<div class="tab-pane" id="add-new-admin">
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+					<form accept-charset="UTF-8" action={% url 'add admin' %} method="post">
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Username</label>
+							<div class="col-md-9">
+								<input type="text"
+							 		class="form-control required"
+									id="newName" name="username"
+									placeholder="Username" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Email Address</label>
+							<div class="col-md-9">
+								<input type="text"
+							 		class="form-control required"
+									id="newName" name="email"
+									placeholder="Email Address" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Password</label>
+							<div class="col-md-9">
+								<input type="password"
+							 		class="form-control required"
+									id="newName" name="password"
+									placeholder="Password" />
+							</div>
+						</div>
+						{% csrf_token %}
+						<button class="btn btn-primary col-md-12 signup-button" style="margin-top: 15px; padding: 5px" type="submit">Add</button>		
+					</form>
+				</div>
+			</div>
 		</div>
 
 		<div class="tab-pane active" id="admin-list">
@@ -24,7 +59,7 @@
 								<tr>
 									<!--th class="col-md-1" data-placeholder="Search..."># </th-->
 									<th class="col-md-1" data-placeholder="Search...">Username </th>
-									<th class="col-md-2" data-placeholder="Search...">Phone Number</th>
+									<th class="col-md-2" data-placeholder="Search...">Email</th>
 									<th class="col-md-2" data-placeholder="Search...">Last Login</th>
 									<th class="col-md-2" data-placeholder="Search...">Join Date</th>
 									<th class="col-md-2" data-placeholder="Search...">Actions</th>
