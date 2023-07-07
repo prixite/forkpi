@@ -268,3 +268,7 @@ th:last-child, td:last-child {
 	background-color: #d60000 !important;
 	border-color: #d60000 !important;
 }
+
+.logo {
+	width: 50px;
+}
