@@ -465,7 +465,7 @@ $(document).ready(function() {
 
 
 function transformModalIntoAuthenticate(id) {
-	var name = $('#name-' + id).data('value').trim();
+	var name = $('#name-' + id).data('value');
 	var modalTitle = 'Enter any credential of user (' + name + '):';
 	$("#authenticate-modal").data('id', id);
 	$('#modal-credential-text').attr('placeholder', 'Enter credential.');
