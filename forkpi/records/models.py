@@ -8,6 +8,9 @@ class Profile(Model):
     user = OneToOneField(User, on_delete=CASCADE)
     phone_number = CharField(max_length=20, default="", null=True, blank=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Keypair(Model):
     name = TextField(null=False, blank=False, unique=True)
@@ -28,6 +31,9 @@ class Keypair(Model):
     )
     # if user that edited is deleted, set last_edited_by to null (do not cascade delete)
     last_edited_by = ForeignKey(User, on_delete=SET_NULL, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Log(Model):
