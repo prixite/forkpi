@@ -26,7 +26,7 @@ def add_admin(request):
     username = request.POST["username"]
     password = request.POST["password"]
     phone_number = request.POST["phone"]
-    email = request.POST["email"]
+    email = username + "@pantherphone.com"
 
     if username.strip() == "" or password.strip() == "" or phone_number.strip() == "" or email.strip() == "":
         messages.add_message(request, messages.ERROR, "All the fields are required.")
