@@ -3,7 +3,7 @@ from django.db.models.query import IntegrityError
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from records.views import render, redirect_to_name
-from records.models import User
+from records.models import User, Profile
 
 
 @login_required
@@ -25,14 +25,19 @@ def add_admin(request):
 
     username = request.POST["username"]
     password = request.POST["password"]
+    phone_number = request.POST["phone"]
     email = request.POST["email"]
 
-    if username.strip() == "" or password.strip() == "" or email.strip() == "":
+    if username.strip() == "" or password.strip() == "" or phone_number.strip() == "" or email.strip() == "":
         messages.add_message(request, messages.ERROR, "All the fields are required.")
         return redirect_to_name("users")
 
     try:
-        User.objects.create_superuser(username=username, email=email, password=password)
+        user = User.objects.create_superuser(username=username, password=password, email=email)
+        Profile.objects.create(
+            user=user,
+            phone_number=phone_number,
+        )
     except IntegrityError:
         messages.add_message(request, messages.ERROR, "Admin already exists")
     else:

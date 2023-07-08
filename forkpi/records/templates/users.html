@@ -21,12 +21,21 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-md-3 control-label">Email Address</label>
+							<label for="name" class="col-md-3 control-label">Emamil</label>
 							<div class="col-md-9">
 								<input type="text"
 							 		class="form-control required"
-									id="newName" name="email"
-									placeholder="Email Address" />
+									id="email" name="email"
+									placeholder="Email" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-md-3 control-label">Phone Number</label>
+							<div class="col-md-9">
+								<input type="text"
+							 		class="form-control required"
+									id="phone" name="phone"
+									placeholder="Phone Number" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -59,7 +68,7 @@
 								<tr>
 									<!--th class="col-md-1" data-placeholder="Search..."># </th-->
 									<th class="col-md-1" data-placeholder="Search...">Username </th>
-									<th class="col-md-2" data-placeholder="Search...">Email</th>
+									<th class="col-md-2" data-placeholder="Search...">Phone Number</th>
 									<th class="col-md-2" data-placeholder="Search...">Last Login</th>
 									<th class="col-md-2" data-placeholder="Search...">Join Date</th>
 									<th class="col-md-2" data-placeholder="Search...">Actions</th>
@@ -96,10 +105,9 @@
 										{{ user.username }}
 									</td>
 
-									<!-- Email and Name -->
+									<!-- Phone -->
 									<td>
-										{{ user.email }}<br/>
-										{{ user.first_name }} {{ user.last_name }}
+										{{ user.profile.phone_number }}<br/>
 									</td>
 
 									<!-- Dates -->
