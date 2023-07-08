@@ -4,6 +4,11 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 
+class Profile(Model):
+    user = OneToOneField(User, on_delete=CASCADE)
+    phone_number = CharField(max_length=20, default="", null=True, blank=True)
+
+
 class Keypair(Model):
     name = TextField(null=False, blank=False, unique=True)
     is_active = BooleanField(default=True)
