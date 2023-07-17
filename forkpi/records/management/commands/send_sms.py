@@ -1,6 +1,12 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from records.models import Keypair
+import os
+import random
+from datetime import datetime
+import logging
+from twilio.rest import Client
+import openai
 
 # Set up logging
 logging.basicConfig(
@@ -33,7 +39,7 @@ def generate_code():
 
 
 def generate_one_liner(code):
-    prompt = f"Generate a funny one-liner text message for a secret Florida Panther themed bar. The passcode for this month is {code}."
+    prompt = "Generate a funny one-liner text message for a secret Florida Panther themed bar. The passcode for this month is {}.".format(code)
     response = openai.Completion.create(engine="text-davinci-003", prompt=prompt, max_tokens=60)
     one_liner = response.choices[0].text.strip()  # remove leading and trailing spaces
     return one_liner.strip('"')  # remove leading and trailing quotes
@@ -99,4 +105,5 @@ class Command(BaseCommand):
             logging.info("Completed successfully.")
 
         except Exception as e:
-            logging.error(f"An error occurred: {e}")
+            logging.error("An error occurred: {}".format(e))
+            print("exception:",str(e))
