@@ -59,51 +59,37 @@ def generate_image():
 
 
 def send_sms(phone_number, message, image_url):
+    print(phone_number, message, image_url)
+    """
     twilio_client.messages.create(
         body=message,
         from_=twilio_phone_number,
         media_url=[image_url],
         to=phone_number
     )
+    """
 
 
 class Command(BaseCommand):
     help = 'Generate new PIN for recipients and save them in pin.txt.'
 
     def handle(self, *args, **kwargs):
-        try:
-            recipients = Keypair.objects.all()
-            if not recipients:
-                logging.info("No recipients found in the database. Exiting.")
-                return
+        logging.info("Starting code generation.")
 
-                # Get existing PINs from the Keypair model
-                existing_pins = [recipient.pin for recipient in recipients]
+        new_code = generate_code()
 
-                # Save existing PINs in pin.txt
-                with open('pin.txt', 'w') as f:
-                    for pin in existing_pins:
-                        f.write(pin + '\n')
+        # Write the new code to revolvingcode.txt
+        with open('/opt/code/revolvingcode.txt', 'w') as writer:
+            writer.write(new_code)
 
-            logging.info("Starting code generation.")
-            new_code = generate_code()
+        logging.info("Starting one-liner generation.")
+        message = generate_one_liner(new_code)
 
-            # Write the new code to revolvingcode.txt
-            with open('revolvingcode.txt', 'w') as f:
-                f.write(new_code)
+        logging.info("Starting image generation.")
+        image_url = generate_image()
 
-            logging.info("Starting one-liner generation.")
-            message = generate_one_liner(new_code)
+        logging.info("Starting SMS sending.")
+        for recipient in Keypair.objects.all():
+            send_sms(recipient.phone_number, message, image_url)
 
-            logging.info("Starting image generation.")
-            image_url = generate_image()
-
-            logging.info("Starting SMS sending.")
-            for recipient in recipients:
-                send_sms(recipient.phone_number, message, image_url)
-
-            logging.info("Completed successfully.")
-
-        except Exception as e:
-            logging.error("An error occurred: {}".format(e))
-            print("exception:",str(e))
+        logging.info("Completed successfully.")
