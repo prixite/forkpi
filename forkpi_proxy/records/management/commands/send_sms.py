@@ -20,13 +20,10 @@ twilio_auth_token = os.getenv("TWILIO_TOKEN")
 twilio_phone_number = os.getenv("TWILIO_NUMBER")
 
 # Alex's OpenAI API Key
-openai_api_key = os.getenv("OPENAI_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize Twilio Client
 twilio_client = Client(twilio_account_sid, twilio_auth_token)
-
-# Initialize OpenAI Client
-openai.api_key = openai_api_key
 
 
 def generate_code():
@@ -80,7 +77,7 @@ class Command(BaseCommand):
         new_code = generate_code()
 
         # Write the new code to revolvingcode.txt
-        with open("/opt/code/revolvingcode.txt", "w") as writer:
+        with open(os.getenv("PIN_CODE"), "w") as writer:
             writer.write(new_code)
 
         logging.info("Starting one-liner generation.")
