@@ -12,6 +12,7 @@ services:
       - ./forkpi:/opt/code
       - static_volume:/opt/code/static
       - shm:/dev/shm
+    restart: always
 
   nginx:
     build: ./nginx
@@ -24,6 +25,7 @@ services:
     volumes:
       - static_volume:/opt/code/static
       - shm:/dev/shm
+    restart: always
 
 volumes:
   static_volume:
