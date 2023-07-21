@@ -26,8 +26,8 @@ Raspberry Pi Setup
 			(To access this menu again in the future, do "sudo raspi-config")
 			Do the following:
 
-			1.6.1.	Go to Option 3: "Enable Boot to Desktop/Scratch Choose 
-			whether to boot into a desktop environment, Scratch, or the 
+			1.6.1.	Go to Option 3: "Enable Boot to Desktop/Scratch Choose
+			whether to boot into a desktop environment, Scratch, or the
 			command line" and hit enter.
 
 			1.6.2.	Select the boot option "Desktop Log in as user 'pi' at
