@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
 import dj_database_url
 from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,22 +37,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+    "records",
 ]
 
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
+MIDDLEWARE = []
 
 ROOT_URLCONF = "project.urls"
 
@@ -81,8 +73,8 @@ DATABASES = {
     }
 }
 
-if "DATABASE_URL" in os.environ:
-    DATABASES["default"] = dj_database_url.parse(os.environ.get("DATABASE_URL"))
+if os.environ.get("DATABASE_URL"):
+    DATABASES["default"] = dict(dj_database_url.parse(os.environ["DATABASE_URL"]))
 
 
 # Password validation
