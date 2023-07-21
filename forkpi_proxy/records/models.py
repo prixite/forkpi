@@ -21,5 +21,8 @@ class Profile(models.Model):
 
 
 class Keypair(models.Model):
+    class Meta:
+        managed = False
+
     name = models.TextField(null=False, blank=False, unique=True)
     phone_number = models.CharField(max_length=20, default="", null=True, blank=True)
