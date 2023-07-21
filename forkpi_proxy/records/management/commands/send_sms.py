@@ -77,7 +77,7 @@ class Command(BaseCommand):
         new_code = generate_code()
 
         # Write the new code to revolvingcode.txt
-        with open(os.getenv("PIN_CODE"), "w") as writer:
+        with open(os.environ["PIN_CODE_FILE"], "w") as writer:
             writer.write(new_code)
 
         logging.info("Starting one-liner generation.")
