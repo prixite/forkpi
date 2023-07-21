@@ -7,3 +7,4 @@ venv
 .env
 db.sqlite3
 forkpi_proxy/log.txt
+forkpi_proxy/revolvingcode.txt
