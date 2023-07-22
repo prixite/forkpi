@@ -12,3 +12,9 @@ services:
     volumes:
       - ./forkpi:/opt/code
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
+  forkpi_proxy:
+    build:
+      context: .
+      dockerfile: ./forkpi_proxy/Dockerfile
+    env_file:
+      - ./forkpi/.env
