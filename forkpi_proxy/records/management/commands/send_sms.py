@@ -84,7 +84,7 @@ class Command(BaseCommand):
         image_url = generate_image()
 
         logging.info("Starting SMS sending.")
-        for recipient in Keypair.objects.all():
+        for recipient in Keypair.objects.filter(is_active=True):
             send_sms(recipient.phone_number, message, image_url)
 
         logging.info("Completed successfully.")

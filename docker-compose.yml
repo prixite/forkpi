@@ -34,6 +34,7 @@ services:
       - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
     depends_on:
       - forkpi_proxy
+    restart: always
 
   nginx:
     build: ./nginx

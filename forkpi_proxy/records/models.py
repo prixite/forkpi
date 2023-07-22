@@ -26,3 +26,4 @@ class Keypair(models.Model):
 
     name = models.TextField(null=False, blank=False, unique=True)
     phone_number = models.CharField(max_length=20, default="", null=True, blank=True)
+    is_active = models.BooleanField(default=True)
