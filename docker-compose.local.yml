@@ -31,5 +31,8 @@ services:
       dockerfile: ./cron/Dockerfile
     env_file:
       - ./.env
+    volumes:
+      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
+      - ./cron:/opt/code
     depends_on:
       - forkpi_proxy
