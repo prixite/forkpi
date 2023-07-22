@@ -5,21 +5,32 @@ services:
       context: .
       dockerfile: ./forkpi/Dockerfile
     env_file:
-      - ./forkpi/.env
+      - ./.env
     ports:
       - 8000:8000
     volumes:
       - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
       - ./forkpi:/opt/code
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
+
   forkpi_proxy:
     build:
       context: .
       dockerfile: ./forkpi_proxy/Dockerfile
     env_file:
-      - ./forkpi_proxy/.env
+      - ./.env
     volumes:
       - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
       - ./forkpi_proxy:/opt/code
     depends_on:
       - forkpi
+
+  cron:
+    build:
+      context: .
+      dockerfile: ./cron/Dockerfile
+    env_file:
+      - ./.env
+    depends_on:
+      - forkpi_proxy
+    restart: always
