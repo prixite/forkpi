@@ -8,8 +8,8 @@ services:
       - ./forkpi/.env
     ports:
       - 8000:8000
-    container_name: forkpi
     volumes:
+      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
       - ./forkpi:/opt/code
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
   forkpi_proxy:
@@ -17,4 +17,9 @@ services:
       context: .
       dockerfile: ./forkpi_proxy/Dockerfile
     env_file:
-      - ./forkpi/.env
+      - ./forkpi_proxy/.env
+    volumes:
+      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
+      - ./forkpi_proxy:/opt/code
+    depends_on:
+      - forkpi
