@@ -33,6 +33,6 @@ services:
       - ./.env
     volumes:
       - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
-      - ./cron:/opt/code
+      - ./cron:/opt/cron
     depends_on:
       - forkpi_proxy
