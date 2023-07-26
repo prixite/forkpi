@@ -1,16 +1,23 @@
+import os
 import psycopg2
 import hashlib
 from pi_serial import get_serial
+import dj_database_url
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class ForkpiDB(object):
     def __init__(self):
         self.conn = psycopg2.connect(
-            database="forkpi",
-            user="pi",
-            password="raspberry",
-            host="forkpi.local",
-            port="5432",
+            database_params = dj_database_url.parse(os.environ["DATABASE_URL"])
+            database=database_params["NAME"],
+            user=database_params["USER"],
+            password=database_params["PASSWORD"],
+            host=database_params["HOST"],
+            port=database_params["PORT"],
         )
         self.conn.autocommit = True
         self.door_id = self.fetch_door_id()
