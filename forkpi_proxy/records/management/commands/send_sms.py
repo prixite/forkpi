@@ -58,10 +58,7 @@ def generate_image():
 
 def send_sms(phone_number, message, image_url):
     twilio_client.messages.create(
-        body=message,
-        from_=twilio_phone_number,
-        media_url=[image_url],
-        to=phone_number
+        body=message, from_=twilio_phone_number, media_url=[image_url], to=phone_number
     )
 
 
