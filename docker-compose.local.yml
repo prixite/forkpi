@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  db:
+    image: postgres:13.4
+    env_file:
+      - ./.env
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   forkpi:
     build:
       context: .
@@ -11,6 +20,8 @@ services:
     volumes:
       - ./forkpi:/opt/code
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
+    depends_on:
+      - db
 
   forkpi_proxy:
     build:
@@ -33,15 +44,6 @@ services:
       - ./cron:/opt/cron
     depends_on:
       - forkpi_proxy
-
-  db:
-    image: postgres:13.4
-    env_file:
-      - ./.env
-    ports:
-      - 5432:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
