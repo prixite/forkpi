@@ -9,7 +9,6 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
       - ./forkpi:/opt/code
     command: bash -c 'python manage.py runserver 0.0.0.0:8000'
 
@@ -20,7 +19,6 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
       - ./forkpi_proxy:/opt/code
     depends_on:
       - forkpi
@@ -32,7 +30,6 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
       - ./cron:/opt/cron
     depends_on:
       - forkpi_proxy

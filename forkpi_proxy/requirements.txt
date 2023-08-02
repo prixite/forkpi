@@ -3,3 +3,4 @@ Django==4.2.3
 openai==0.27.8
 python-dotenv==1.0.0
 twilio==8.5.0
+psycopg2==2.9.6
