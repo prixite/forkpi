@@ -5,3 +5,4 @@ pycrypto==2.6.1
 pyserial==3.5
 python-dotenv==0.9.1
 quick2wire-api==0.0.0.2
+psycopg2==2.7.7
