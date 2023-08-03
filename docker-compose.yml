@@ -1,5 +1,12 @@
 version: '3.8'
 services:
+  db:
+    image: postgres:13.4
+    env_file:
+      - ./.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   forkpi:
     build:
       context: .
@@ -12,6 +19,8 @@ services:
       - shm:/dev/shm
     command: bash -c './scripts/run-gunicorn'
     restart: always
+    depends_on:
+      - db
 
   forkpi_proxy:
     build:
@@ -51,3 +60,4 @@ services:
 volumes:
   static_volume:
   shm:
+  pgdata:
