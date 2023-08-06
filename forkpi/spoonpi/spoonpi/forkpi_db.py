@@ -1,6 +1,8 @@
 import os
 import psycopg2
 import hashlib
+
+from forkpi.records.models import AppConfig, User
 from pi_serial import get_serial
 import dj_database_url
 
@@ -11,8 +13,8 @@ load_dotenv()
 
 class ForkpiDB(object):
     def __init__(self):
+        database_params = dj_database_url.parse(os.environ["DATABASE_URL"])
         self.conn = psycopg2.connect(
-            database_params = dj_database_url.parse(os.environ["DATABASE_URL"])
             database=database_params["NAME"],
             user=database_params["USER"],
             password=database_params["PASSWORD"],
@@ -33,6 +35,15 @@ class ForkpiDB(object):
              This is an empty list if is_authorized is False
         """
         keywords = kwargs.keys()
+        if "global_pin" in keywords:
+            global_pin = kwargs["global_pin"]
+            user = User.objects.filter(username=kwargs.get("username")).first()
+            if global_pin == AppConfig.objects.last().global_pin:
+                return (
+                    True,
+                    [user],
+                )
+
         if (
             len(keywords) != 2
         ):  # not two-factor (if single-factor, pin should be set to empty string)

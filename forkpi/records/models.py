@@ -61,3 +61,7 @@ class Option(Model):
 class Door(Model):
     name = TextField(default="", unique=True)
     serial = TextField(unique=True)
+
+
+class AppConfig(Model):
+    global_pin = TextField(default="", null=True, blank=True)
