@@ -35,8 +35,13 @@ class ForkpiDB(object):
              This is an empty list if is_authorized is False
         """
         keywords = kwargs.keys()
-        if "global_pin" in keywords:
-            global_pin = kwargs["global_pin"]
+        GLOBAL_PIN = "global_pin"
+        PIN = "pin"
+        RFID_UUID = "rfid_uid"
+        FINGERPRINT_MATCHES = "fingerprint_matches"
+
+        if GLOBAL_PIN in keywords:
+            global_pin = kwargs[GLOBAL_PIN]
             user = User.objects.filter(username=kwargs.get("username")).first()
             if global_pin == AppConfig.objects.last().global_pin:
                 return (
@@ -53,14 +58,14 @@ class ForkpiDB(object):
 
         conditions = ["is_active = TRUE"]
 
-        if "pin" in keywords:
-            pin = kwargs["pin"]
+        if PIN in keywords:
+            pin = kwargs[PIN]
             conditions.append("hash_pin = '%s'" % self.hash_string(pin))
-        if "rfid_uid" in keywords:
-            rfid_uid = kwargs["rfid_uid"]
+        if RFID_UUID in keywords:
+            rfid_uid = kwargs[RFID_UUID]
             conditions.append("hash_rfid = '%s'" % self.hash_string(rfid_uid))
-        if "fingerprint_matches" in keywords:
-            keypair_ids = kwargs["fingerprint_matches"]
+        if FINGERPRINT_MATCHES in keywords:
+            keypair_ids = kwargs[FINGERPRINT_MATCHES]
             # (id=1 OR id=2 OR ...) if fingerprint matched with those ids
             conditions.append(
                 "(%s)" % " OR ".join(map(lambda x: "K.id=" + str(x), keypair_ids))
