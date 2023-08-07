@@ -64,4 +64,6 @@ class Door(Model):
 
 
 class AppConfig(Model):
-    global_pin = TextField(default="", null=True, blank=True)
+    global_pin = TextField(default="", db_index=True, null=True, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)

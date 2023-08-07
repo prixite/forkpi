@@ -30,7 +30,9 @@ class Keypair(models.Model):
 
 
 class AppConfig(models.Model):
-    global_pin = models.TextField(default="", null=True, blank=True)
+    global_pin = models.TextField(default="", db_index=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
