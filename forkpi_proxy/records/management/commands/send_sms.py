@@ -69,8 +69,8 @@ class Command(BaseCommand):
         logging.info("Starting code generation.")
 
         new_code = generate_code()
-
-        AppConfig.objects.create(global_pin=new_code)
+        app_config = AppConfig.objects.get_singleton()
+        app_config.update_global_pin(new_code)
 
         logging.info("Starting one-liner generation.")
         message = generate_one_liner(new_code)

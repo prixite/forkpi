@@ -29,6 +29,12 @@ class Keypair(models.Model):
     is_active = models.BooleanField(default=True)
 
 
+class AppConfigManager(models.Manager):
+    def get_singleton(self):
+        obj, created = self.get_or_create(pk=1)
+        return obj
+
+
 class AppConfig(models.Model):
     global_pin = models.TextField(default="", db_index=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,4 +42,10 @@ class AppConfig(models.Model):
 
     class Meta:
         managed = False
-        db_table = "reocords_appconfig"
+        db_table = "records_appconfig"
+
+    objects = AppConfigManager()
+
+    def update_global_pin(self, new_pin):
+        self.global_pin = new_pin
+        self.save()
