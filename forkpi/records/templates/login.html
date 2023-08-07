@@ -64,7 +64,24 @@
             color: #1a74b8;
             text-decoration: none;
         }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
     </style>
+	<script src="/static/jquery/jquery-2.1.0.min.js"></script>
+	<script src="/static/base.js"></script>
+	<script src="/static/bootstrap/js/bootstrap.min.js"></script>	
+	<script src="/static/jquery/tablesorter/jquery.tablesorter.js"></script>
+	<script src="/static/jquery/tablesorter/jquery.tablesorter.widgets.js"></script>
+	<script src="/static/jquery/tokeninput/jquery.tokeninput.js"></script>	
 </head>
 <body>
     <video playsinline autoplay muted loop id="bgvid">
@@ -73,7 +90,14 @@
     <div class="container">
         <img src="https://content.sportslogos.net/logos/1/13/full/7332_florida_panthers-primary_dark-2017.png" alt="Florida Panthers Logo">
         <h2>Panther Bar Phone</h2>
-		    <form autocomplete="off" accept-charset="UTF-8" action={% url 'logging in' %} method="post">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+		{% endif %}
+        <form autocomplete="off" accept-charset="UTF-8" action={% url 'logging in' %} method="post">
             {% csrf_token %}
             <input name="username" type="text" placeholder="Username" required>
             <input name="password" type="password" placeholder="Password" required>
