@@ -47,7 +47,7 @@ class ForkpiDB(object):
         if AuthKeys.GLOBAL_PIN.value in keywords:
             global_pin = kwargs[AuthKeys.GLOBAL_PIN.value]
             user = User.objects.get(username=kwargs.get("username"))
-            if global_pin == AppConfig.objects.get_singleton().global_pin:
+            if global_pin == AppConfig.objects.get_or_update_global_pin():
                 return (
                     True,
                     [user],

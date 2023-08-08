@@ -2,6 +2,7 @@ from django.db.models import *
 from django.contrib.auth.models import User
 
 from datetime import datetime
+from utils import GlobalPinMixin
 
 
 class Profile(Model):
@@ -63,19 +64,13 @@ class Door(Model):
     serial = TextField(unique=True)
 
 
-class AppConfigManager(Manager):
-    def get_singleton(self):
-        obj, created = self.get_or_create(pk=1)
-        return obj
+class AppConfigManager(Manager, GlobalPinMixin):
+    pass
 
 
 class AppConfig(Model):
-    global_pin = TextField(default="", db_index=True, null=True, blank=True)
+    global_pin = TextField(default="", null=True, blank=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
     objects = AppConfigManager()
-
-    def update_global_pin(self, new_pin):
-        self.global_pin = new_pin
-        self.save()
