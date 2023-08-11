@@ -3,7 +3,7 @@ from enum import Enum
 import psycopg2
 import hashlib
 
-from records.models import AppConfig, User
+from records.models import AppConfig, User, Door
 from .pi_serial import get_serial
 import dj_database_url
 
@@ -114,12 +114,11 @@ class ForkpiDB(object):
         serial_num = get_serial()
         if serial_num is None:
             raise Exception("Unable to get serial number!")
-
-        c = self.conn.cursor()
-        c.execute("SELECT id FROM records_door WHERE serial = '%s'" % serial_num)
-        result = c.fetchone()
+        result = Door.objects.raw(
+            ("SELECT id FROM records_door WHERE serial = '%s'" % serial_num)
+        )
         if result:
-            return result[0]
+            return result[0].id
         else:
             raise Exception("Register this door with ForkPi first!")
 
