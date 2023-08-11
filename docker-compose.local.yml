@@ -18,8 +18,9 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./forkpi:/opt/code
-    command: bash -c 'python manage.py runserver 0.0.0.0:8000'
+      - ./forkpi:/opt/code/forkpi
+      - ./utils.py:/opt/code/utils.py
+    command: bash -c 'python forkpi/manage.py runserver 0.0.0.0:8000'
     depends_on:
       - db
 
@@ -30,7 +31,8 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./forkpi_proxy:/opt/code
+      - ./forkpi_proxy:/opt/code/forkpi_proxy
+      - ./utils.py:/opt/code/utils.py
     depends_on:
       - forkpi
 

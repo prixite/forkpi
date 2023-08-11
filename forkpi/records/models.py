@@ -2,6 +2,7 @@ from django.db.models import *
 from django.contrib.auth.models import User
 
 from datetime import datetime
+from utils import GlobalPinMixin
 
 
 class Profile(Model):
@@ -61,3 +62,15 @@ class Option(Model):
 class Door(Model):
     name = TextField(default="", unique=True)
     serial = TextField(unique=True)
+
+
+class AppConfigManager(Manager, GlobalPinMixin):
+    pass
+
+
+class AppConfig(Model):
+    global_pin = TextField(default="", null=True, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
+
+    objects = AppConfigManager()

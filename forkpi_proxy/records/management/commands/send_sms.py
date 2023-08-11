@@ -4,7 +4,7 @@ import random
 
 import openai
 from django.core.management.base import BaseCommand
-from records.models import Keypair
+from records.models import AppConfig, Keypair
 from twilio.rest import Client
 
 # Set up logging
@@ -69,10 +69,7 @@ class Command(BaseCommand):
         logging.info("Starting code generation.")
 
         new_code = generate_code()
-
-        # Write the new code to revolvingcode.txt
-        with open(os.environ["PIN_CODE_FILE"], "w") as writer:
-            writer.write(new_code)
+        AppConfig.objects.get_or_update_global_pin(new_code)
 
         logging.info("Starting one-liner generation.")
         message = generate_one_liner(new_code)

@@ -11,4 +11,8 @@ COPY forkpi/requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY ./forkpi ./
+COPY ./forkpi ./forkpi
+COPY ./utils.py ./utils.py
+
+ENV PYTHONPATH="/opt/code:${PYTHONPATH}"
+ENV DJANGO_SETTINGS_MODULE="forkpi.settings"

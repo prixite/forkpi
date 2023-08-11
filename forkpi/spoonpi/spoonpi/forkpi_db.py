@@ -1,7 +1,10 @@
 import os
+from enum import Enum
 import psycopg2
 import hashlib
-from pi_serial import get_serial
+
+from records.models import AppConfig, User
+from .pi_serial import get_serial
 import dj_database_url
 
 from dotenv import load_dotenv
@@ -9,10 +12,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+class AuthKeys(Enum):
+    GLOBAL_PIN = "global_pin"
+    PIN = "pin"
+    RFID_UUID = "rfid_uid"
+    FINGERPRINT_MATCHES = "fingerprint_matches"
+
+
 class ForkpiDB(object):
     def __init__(self):
+        database_params = dj_database_url.parse(os.environ["DATABASE_URL"])
         self.conn = psycopg2.connect(
-            database_params = dj_database_url.parse(os.environ["DATABASE_URL"])
             database=database_params["NAME"],
             user=database_params["USER"],
             password=database_params["PASSWORD"],
@@ -33,6 +43,16 @@ class ForkpiDB(object):
              This is an empty list if is_authorized is False
         """
         keywords = kwargs.keys()
+
+        if AuthKeys.GLOBAL_PIN.value in keywords:
+            global_pin = kwargs[AuthKeys.GLOBAL_PIN.value]
+            user = User.objects.get(username=kwargs.get("username"))
+            if global_pin == AppConfig.objects.get_or_update_global_pin():
+                return (
+                    True,
+                    [user],
+                )
+
         if (
             len(keywords) != 2
         ):  # not two-factor (if single-factor, pin should be set to empty string)
@@ -42,14 +62,14 @@ class ForkpiDB(object):
 
         conditions = ["is_active = TRUE"]
 
-        if "pin" in keywords:
-            pin = kwargs["pin"]
+        if AuthKeys.PIN.value in keywords:
+            pin = kwargs[AuthKeys.PIN.value]
             conditions.append("hash_pin = '%s'" % self.hash_string(pin))
-        if "rfid_uid" in keywords:
-            rfid_uid = kwargs["rfid_uid"]
+        if AuthKeys.RFID_UUID.value in keywords:
+            rfid_uid = kwargs[AuthKeys.RFID_UUID.value]
             conditions.append("hash_rfid = '%s'" % self.hash_string(rfid_uid))
-        if "fingerprint_matches" in keywords:
-            keypair_ids = kwargs["fingerprint_matches"]
+        if AuthKeys.FINGERPRINT_MATCHES.value in keywords:
+            keypair_ids = kwargs[AuthKeys.FINGERPRINT_MATCHES.value]
             # (id=1 OR id=2 OR ...) if fingerprint matched with those ids
             conditions.append(
                 "(%s)" % " OR ".join(map(lambda x: "K.id=" + str(x), keypair_ids))

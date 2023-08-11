@@ -11,4 +11,8 @@ COPY forkpi_proxy/requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY ./forkpi_proxy ./
+COPY ./forkpi_proxy ./forkpi_proxy
+COPY ./utils.py ./utils.py
+
+ENV PYTHONPATH="/opt/code:${PYTHONPATH}"
+ENV DJANGO_SETTINGS_MODULE="forkpi_proxy.settings"
