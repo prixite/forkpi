@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+cd forkpi
 gunicorn --worker-tmp-dir /dev/shm forkpi.wsgi:application --bind unix:/dev/shm/gunicorn.sock
