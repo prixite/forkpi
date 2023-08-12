@@ -14,10 +14,9 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
-      - static_volume:/opt/code/static
+      - static_volume:/opt/code/forkpi/static
       - shm:/dev/shm
-    command: bash -c './scripts/run-gunicorn'
+    command: bash -c './forkpi/scripts/run-gunicorn'
     restart: always
     depends_on:
       - db
@@ -28,8 +27,6 @@ services:
       dockerfile: ./forkpi_proxy/Dockerfile
     env_file:
       - ./.env
-    volumes:
-      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
     depends_on:
       - forkpi
 
@@ -39,8 +36,6 @@ services:
       dockerfile: ./cron/Dockerfile
     env_file:
       - ./.env
-    volumes:
-      - ./forkpi/db.sqlite3:/opt/code/db.sqlite3
     depends_on:
       - forkpi_proxy
     restart: always
