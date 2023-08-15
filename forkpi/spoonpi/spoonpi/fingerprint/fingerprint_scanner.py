@@ -69,7 +69,7 @@ class FingerprintScanner(object):
             if self.open():  # baud rate 9600 succeeded -> change to 115200
                 self.change_baudrate(115200)
             else:  # baud rate 9600 failed; maybe already set to 115200?
-                self._serial.setBaudrate(115200)
+                self._serial.baudrate = 115200
                 if self.open():  # baud rate 115200 succeeded
                     self._serial.flush()
                 else:  # baud rate 115200 failed
@@ -186,14 +186,14 @@ class FingerprintScanner(object):
             True if success, False if invalid baud.
 
         """
-        if baudrate != self._serial.getBaudrate():
+        if baudrate != self._serial.baudrate:
             if self._run_command("ChangeBaudrate", parameter=baudrate):
                 if self.debug:
                     print(
                         "Changed baud rate from %s to %s"
-                        % (self._serial.getBaudrate(), baudrate)
+                        % (self._serial.baudrate, baudrate)
                     )
-                self._serial.setBaudrate(baudrate)
+                self._serial.baudrate = baudrate
                 return True
             else:
                 return False
