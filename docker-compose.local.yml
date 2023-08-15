@@ -21,7 +21,7 @@ services:
       - ./forkpi:/opt/code/forkpi
       - ./utils.py:/opt/code/utils.py
     devices:
-      - /dev/ttyS0:/dev/ttyS0
+      - /dev/ttyAMA0:/dev/ttyAMAS0
     command: bash -c 'python forkpi/manage.py runserver 0.0.0.0:8000'
     depends_on:
       - db
