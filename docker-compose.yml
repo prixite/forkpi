@@ -18,7 +18,7 @@ services:
       - static_volume:/opt/code/forkpi/static
       - shm:/dev/shm
     devices:
-      - /dev/ttyAMA0:/dev/ttyAMAS0
+      - /dev/ttyAMA0:/dev/ttyAMA0
     command: bash -c './forkpi/scripts/run-gunicorn'
     restart: always
     depends_on:
