@@ -634,7 +634,7 @@ class FingerprintScanner(object):
             The response received from the FPS, None if read timed out.
 
         """
-        self._serial.setTimeout(timeout)
+        self._serial.timeout = timeout
         bytes_ = self._serial.read(size=12)
 
         if len(bytes_) < 12:
@@ -696,7 +696,7 @@ class FingerprintScanner(object):
             data_length + 6
         )  # the +6 comes from the other non-data parts of the packet
 
-        self._serial.setTimeout(timeout)
+        self._serial.timeout = timeout
         bytes_ = self._serial.read(size=packet_length)
 
         if len(bytes_) < packet_length:
