@@ -6,6 +6,7 @@ services:
       - ./.env
     volumes:
       - pgdata:/var/lib/postgresql/data
+    restart: always
 
   forkpi:
     build:
